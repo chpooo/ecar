@@ -49,7 +49,7 @@
      </ul>
      </div>
      <div class="nine columns">
-     <div class="row"><h4>pie chart</h4></div>
+     <div class="row"><h4>donut chart</h4></div>
      <hr>
      <div class="row">
          <div class="introduction">
@@ -119,17 +119,16 @@ var width = 960,
     height = 500,
     radius = Math.min(width, height) / 2;
 
-  var color = d3.scale.category20b();
-
+var color=d3.scale.category20b();
 var arc = d3.svg.arc()
     .outerRadius(radius - 10)
-    .innerRadius(0);
+    .innerRadius(radius - 70);
 
 var pie = d3.layout.pie()
     .sort(null)
     .value(function(d) { return d.data; });
 
-var svg = d3.select(".show").append("svg")
+var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height)
   .append("g")

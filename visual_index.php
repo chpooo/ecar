@@ -51,7 +51,8 @@
      <div class="nine columns">
       <div class="row"><h4>Basic Charts</h4></div>
       <hr>
-      <a href="vis_tech/pie.php">pie chart</a>
+      <a href="vis_tech/pie.php">pie chart</a><br/>
+      <a href="vis_tech/donut.php">donut chart</a>
       <div></div>  
      </div>
 </div>
