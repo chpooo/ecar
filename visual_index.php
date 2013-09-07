@@ -52,8 +52,13 @@
       <div class="row"><h4>Basic Charts</h4></div>
       <hr>
       <a href="vis_tech/pie.php">pie chart</a><br/>
-      <a href="vis_tech/donut.php">donut chart</a>
-      <div></div>  
+      <a href="vis_tech/donut.php">donut chart</a><br/>
+      <a href="vis_tech/bar.php">bar chart</a><br/>
+      <a href="vis_tech/line.php">line chart</a><br/>
+      <hr>
+      <div class="row"><h4>Interaction & Animation Charts</h4></div>
+      <hr>
+      <a href="vis_tech/collapsible_tree.php">Collapsible Tree Layout</a><br/>  
      </div>
 </div>
   <script src="javascripts/jquery.js"></script>

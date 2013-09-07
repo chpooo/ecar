@@ -49,11 +49,11 @@
      </ul>
      </div>
      <div class="nine columns">
-     <div class="row"><h4>pie chart</h4></div>
+     <div class="row"><h4>line chart</h4></div>
      <hr>
      <div class="row">
          <div class="introduction">
-             <strong>输入数据格式(数据最大不超过20行,数据标题必须是name和data两栏)：data.csv</strong>
+             <strong>输入数据格式：line.tsv</strong>
              <br/>
              <pre>
              <code class="undefined">
@@ -102,7 +102,7 @@
           </select>
           </div>
           <div class="five columns">
-          <input id="file_path_submit" type="submit" onclick="draw_pie_chart(document.getElementsByName('file_path')[0].value)"/>
+          <input id="file_path_submit" type="submit" onclick="draw_line_chart(document.getElementsByName('file_path')[0].value)"/>
           </div>
      </div>
      <div class="row">
@@ -111,51 +111,92 @@
      </div>
      </div>
 </div>
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+</style>
   <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
-function draw_pie_chart(file_path)
+function draw_line_chart(file_path)
 {
-var width = 960,
-    height = 500,
-    radius = Math.min(width, height) / 2;
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-  var color = d3.scale.category20b();
+var parseDate = d3.time.format("%d-%b-%y").parse;
 
-var arc = d3.svg.arc()
-    .outerRadius(radius - 10)
-    .innerRadius(0);
+var x = d3.time.scale()
+    .range([0, width]);
 
-var pie = d3.layout.pie()
-    .sort(null)
-    .value(function(d) { return d.data; });
+var y = d3.scale.linear()
+    .range([height, 0]);
 
-var svg = d3.select(".show").append("svg")
-    .attr("width", width)
-    .attr("height", height)
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.close); });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
   .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv(file_path, function(error, data) {
-
+d3.tsv(file_path, function(error, data) {
   data.forEach(function(d) {
-    d.data = +d.data;
+    d.date = parseDate(d.date);
+    d.close = +d.close;
   });
 
-  var g = svg.selectAll(".arc")
-      .data(pie(data))
-    .enter().append("g")
-      .attr("class", "arc");
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain(d3.extent(data, function(d) { return d.close; }));
 
-  g.append("path")
-      .attr("d", arc)
-      .style("fill", function(d) { return color(d.data.name); });
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
 
-  g.append("text")
-      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-      .attr("dy", ".35em")
-      .style("text-anchor", "middle")
-      .text(function(d) { return d.data.name; });
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Price ($)");
 
+  svg.append("path")
+      .datum(data)
+      .attr("class", "line")
+      .attr("d", line);
 });
 }
 

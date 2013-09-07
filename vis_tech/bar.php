@@ -49,23 +49,41 @@
      </ul>
      </div>
      <div class="nine columns">
-     <div class="row"><h4>pie chart</h4></div>
+     <div class="row"><h4>bar chart</h4></div>
      <hr>
      <div class="row">
          <div class="introduction">
-             <strong>输入数据格式(数据最大不超过20行,数据标题必须是name和data两栏)：data.csv</strong>
+             <strong>输入数据格式(数据标题必须是name和data两栏)：bar.tsv</strong>
              <br/>
              <pre>
              <code class="undefined">
-"name,data
-5,2704659
-5-13,4499890
-14-17,2159981
-18-24,3853788
-25-44,14106543
-45-64,8819342
-65,612463
-"
+name	data
+A	.08167
+B	.01492
+C	.02780
+D	.04253
+E	.12702
+F	.02288
+G	.02022
+H	.06094
+I	.06973
+J	.00153
+K	.00747
+L	.04025
+M	.02517
+N	.06749
+O	.07507
+P	.01929
+Q	.00098
+R	.05987
+S	.06333
+T	.09056
+U	.02758
+V	.01037
+W	.02465
+X	.00150
+Y	.01971
+Z	.00074
              </code>
              </pre>
          </div>
@@ -102,7 +120,7 @@
           </select>
           </div>
           <div class="five columns">
-          <input id="file_path_submit" type="submit" onclick="draw_pie_chart(document.getElementsByName('file_path')[0].value)"/>
+          <input id="file_path_submit" type="submit" onclick="draw_bar_chart(document.getElementsByName('file_path')[0].value)"/>
           </div>
      </div>
      <div class="row">
@@ -111,52 +129,93 @@
      </div>
      </div>
 </div>
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.x.axis path {
+  display: none;
+}
+
+</style>
   <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
-function draw_pie_chart(file_path)
+function draw_bar_chart(file_path)
 {
-var width = 960,
-    height = 500,
-    radius = Math.min(width, height) / 2;
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-  var color = d3.scale.category20b();
+var formatPercent = d3.format(".0%");
 
-var arc = d3.svg.arc()
-    .outerRadius(radius - 10)
-    .innerRadius(0);
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
 
-var pie = d3.layout.pie()
-    .sort(null)
-    .value(function(d) { return d.data; });
+var y = d3.scale.linear()
+    .range([height, 0]);
 
-var svg = d3.select(".show").append("svg")
-    .attr("width", width)
-    .attr("height", height)
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickFormat(formatPercent);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
   .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv(file_path, function(error, data) {
+d3.tsv(file_path, type, function(error, data) {
+  x.domain(data.map(function(d) { return d.name; }));
+  y.domain([0, d3.max(data, function(d) { return d.data; })]);
 
-  data.forEach(function(d) {
-    d.data = +d.data;
-  });
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
 
-  var g = svg.selectAll(".arc")
-      .data(pie(data))
-    .enter().append("g")
-      .attr("class", "arc");
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Frequency");
 
-  g.append("path")
-      .attr("d", arc)
-      .style("fill", function(d) { return color(d.data.name); });
-
-  g.append("text")
-      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-      .attr("dy", ".35em")
-      .style("text-anchor", "middle")
-      .text(function(d) { return d.data.name; });
+  svg.selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.name); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.data); })
+      .attr("height", function(d) { return height - y(d.data); });
 
 });
+
+function type(d) {
+  d.data = +d.data;
+  return d;
+}
 }
 
 </script>

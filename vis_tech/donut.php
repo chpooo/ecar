@@ -53,7 +53,7 @@
      <hr>
      <div class="row">
          <div class="introduction">
-             <strong>输入数据格式(数据最大不超过20行,数据标题必须是name和data两栏)：sample.csv</strong>
+             <strong>输入数据格式(数据最大不超过20行,数据标题必须是name和data两栏)：data1.csv</strong>
              <br/>
              <pre>
              <code class="undefined">
