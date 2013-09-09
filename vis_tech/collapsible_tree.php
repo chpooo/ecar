@@ -80,7 +80,7 @@
           <div class="five columns">
           <select name="file_path">
           <?php
-            $basedir="/home/chpooo/workspace/ecar/upload/"; 
+            $basedir="../upload/"; 
             $dir = opendir($basedir); 
             while ($fileDir = readdir($dir)) {
                if (!strcmp($fileDir,".")||!strcmp($fileDir,"..")) { 
