@@ -103,7 +103,7 @@
      </div>
 </div>
 
-  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="../javascripts/d3/d3.v3.min.js"></script>
 <style>
 
 

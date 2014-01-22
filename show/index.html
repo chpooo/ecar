@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<script type="text/javascript" src="../lib/d3.v3.min.js"></script>
+<script type="text/javascript" src=../lib/d2.js></script>
+
+
+<style>
+body {
+	font: 10px sans-serif;
+}
+</style>
+
+
+</head>
+<body>
+	<div>
+		<select id="select"
+			onchange="ProcessFunc(this.options[this.options.selectedIndex].value)">
+			
+			<option value="drawLineChart">drawLineChart</option>
+			<option value="drawBarChart">drawBarChart</option>
+			<option value="drawGeoGraph">drawGeoGraph</option>
+			<option value="drawPieChart" selected>drawPieChart</option>
+
+		</select>
+	</div>
+
+	<div>
+
+		<script type="text/javascript">
+			d2.drawPieChart("../data/pie.json");
+
+			var select1 = document.getElementById("select");
+
+			function ProcessFunc(selectedValue) {
+				
+				d2.deleteChartOrGraph();
+
+				
+				if (selectedValue == "drawPieChart") {
+					console.log("hello1");
+
+					d2.drawPieChart("../data/pie.json");
+				} else if (selectedValue == "drawLineChart") {
+					console.log("hello2");
+
+					d2.drawLineChart("../data/line.json");
+				} else if (selectedValue == "drawBarChart") {
+					console.log("hello3");
+
+					d2.drawBarChart("../data/bar.json");
+				} else if (selectedValue == "drawGeoGraph") {
+					console.log("pre addSomeTag()");
+					window.location.href = "index2.html";
+					
+				}
+
+			}
+		</script>
+	</div>
+
+</body>
+</html>

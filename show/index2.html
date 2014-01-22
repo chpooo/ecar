@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<script type='text/javascript' src='../lib/d3.js'></script>
+<script type='text/javascript' src='../lib/d3.geo.js'></script>
+<script type="text/javascript" src=../lib/d2.js></script>
+
+
+<style>
+body {
+	font: 10px sans-serif;
+}
+</style>
+
+
+</head>
+<body>
+	<div>
+		<select>
+			<option value="drawPieChart">drawPieChart</option>
+			<option value="drawLineChart">drawLineChart</option>
+			<option value="drawBarChart">drawBarChart</option>
+			<option value="drawGeoGraph" selected>drawGeoGraph</option>
+
+		</select>
+	</div>
+
+	<div>
+
+		<script type="text/javascript">
+			d2.drawGeoGraph("../data/geoInfo.json");
+			
+			d3.select("select").
+
+			d3.select("select").on("change", function() {
+				console.log(this.value);
+
+				d2.deleteChartOrGraph();
+
+				var selectedValue = this.value;
+				if (selectedValue == "drawPieChart") {
+					window.history.go(-1);
+
+				} else if (selectedValue == "drawLineChart") {
+					window.history.go(-1);
+
+				} else if (selectedValue == "drawBarChart") {
+
+					window.history.go(-1);
+				} else if (selectedValue == "drawGeoGraph") {
+					console.log("pre addSomeTag()");
+
+					d2.drawGeoGraph("../data/geoInfo.json");
+				}
+
+			});
+		</script>
+	</div>
+
+</body>
+</html>
