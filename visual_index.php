@@ -62,6 +62,7 @@
                         <option value="drawBarChart">drawBarChart</option>
                         <option value="drawGeoGraph">drawGeoGraph</option>
                         <option value="drawCollapseTree">drawCollapseTree</option>
+			<option value="drawZoomableCircle">drawZoomableCircle</option>
                         <option value="drawPieChart" selected>drawPieChart</option>
 
                 </select>
@@ -95,6 +96,9 @@
                                 } else if (selectedValue == "drawCollapseTree")
 				{
 					d2.drawCollapseTree("data/flare.json");
+				} else if(selectedValue == "drawZoomableCircle")
+				{
+					d2.drawZoomableCircle("data/flare.json");
 				}
 				 else if (selectedValue == "drawGeoGraph") {
                                         console.log("pre addSomeTag()");
